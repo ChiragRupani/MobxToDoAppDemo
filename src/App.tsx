@@ -1,26 +1,41 @@
-import React from 'react';
-import logo from './logo.svg';
+import { Provider } from 'mobx-react';
+import * as React from 'react';
+import { Col, Container, Row } from 'reactstrap';
 import './App.css';
+import ToDoComponent from './ToDo/ToDoComponent';
+import ToDoStore from './ToDo/ToDoStore';
+import ToDoSummary from './ToDo/ToDoSummary';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+export default class App extends React.Component<{}, {}> {
+  private todoStore: ToDoStore;
+
+  constructor(props) {
+    super(props);
+    this.todoStore = new ToDoStore();
+  }
+
+  componentDidMount() {
+    this.todoStore.init();
+  }
+
+  render() {
+    return (
+      <div className="App">
+        <h3>ToDo App using React and Mobx</h3>
+
+        <Provider ToDoStore={this.todoStore}>
+          <Container fluid={true}>
+            <Row>
+              <Col md={{ size: 9 }}>
+                <ToDoComponent />
+              </Col>
+              <Col md={{ size: 3 }}>
+                <ToDoSummary />
+              </Col>
+            </Row>
+          </Container>
+        </Provider>
+      </div>
+    );
+  }
 }
-
-export default App;
